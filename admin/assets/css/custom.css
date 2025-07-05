@@ -1,0 +1,56 @@
+.error_msg_invalid {
+    background: #ee5f5b;
+    text-align: center;
+    color: #fff;
+    border-radius: 5px;
+    padding: 5px 0px;
+}
+.error_msg {
+    color: #ee5f5b;
+}
+  .table-responsive {
+    min-height: .01%;
+    overflow-x: auto;
+}
+
+img.doc_img {
+    width: 50px;
+    height: 50px;
+}
+.red_border {
+    border: 2px solid red;
+    padding: 5px 5px;
+}
+.green_border {
+    border: 2px solid green;
+    padding: 5px 5px;
+}
+.img_hyper{
+	position: relative;
+}
+
+.icon_status {
+    position: absolute;
+    top: -44px;
+    right: -2px;
+}
+.red_icon {
+    font-size: 19px!important;
+    color: red;
+    border: 3px solid red;
+    border-radius: 50%;
+}
+.green_icon {
+    font-size: 19px!important;
+    color: green;
+    border: 3px solid green;
+    border-radius: 50%;
+}
+.no_document {
+    height: 65px;
+    width: 92px;
+    border: 2px solid red;
+    font-size: 12px;
+    text-align: center;
+    padding: 26px 0px 0px 3px;
+}

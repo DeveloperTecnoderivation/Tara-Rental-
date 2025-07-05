@@ -1,0 +1,136 @@
+<?php 
+include("../conn-web/cw.php");
+  if(!$_SESSION["tata_login_username"]){
+  header('Location:index.php'); 
+}
+?>
+<?php include "../header.php";  ?>
+  <div class="span9" id="content">
+    <div class="row-fluid">
+      <div class="navbar">
+        <div class="navbar-inner">
+          <ul class="breadcrumb">
+            <i class="fa fa-angle-left hide-sidebar"><a href="#" title="Hide Sidebar" rel="tooltip">&nbsp;</a></i>
+            <i class="fa fa-angle-right show-sidebar" style="display:none;"><a href="#" title="Show Sidebar" rel="tooltip">&nbsp;</a></i><li><a href="<?php echo $base_url ?>/dashboard.php">Dashboard</a> <span class="divider">/</span></li><li><a href="#">Color</a> <span class="divider">/</span></li><li class="active">Edit Color</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row-fluid">
+    <!-- block -->
+    <div class="block">
+      <div class="navbar navbar-inner block-header">
+        <div class="muted pull-left">Edit Color</div>
+      </div>
+      <div class="block-content collapse in">
+        <div class="span12">
+           <?php
+                if(isset($_SESSION['success'])){
+                    echo('<p style="color:green">'.$_SESSION['success']."</p>");
+                    unset($_SESSION['success']);
+                }
+                if(isset($_SESSION['error'])){
+                    echo('<p style="color:red">'.$_SESSION['error']."</p>");
+                    unset($_SESSION['error']);
+                }
+            ?>
+                  
+            <?php
+                $pid=$_REQUEST['pid'];
+                $getdata="select * from tbl_color where id=$pid";  
+                $gdata=mysqli_query($connect,$getdata);
+                $rowcount=mysqli_num_rows($gdata);
+                if($rowcount==1) 
+                {
+                 $rown=mysqli_fetch_array($gdata);
+                 $pid = $rown['id'];
+
+                   
+            ?>    
+                    
+            <form  id="edit_form" name="edit_form" class="form-horizontal" method="post" action="update.php" enctype="multipart/form-data">
+            <fieldset>              
+              <div class="control-group">
+                <label class="control-label" for="focusedInput"> Name</label>
+                <div class="controls">
+                  <input type="text" name="name" class="input-xlarge focused" placeholder=" Name" id="name" required="required" value="<?php echo $rown['name']?>">
+                  <div id="name_error" class="error_msg"></div>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="focusedInput">Hexcode</label>
+                <div class="controls">
+                  <input type="color" name="hexcode" class="input-xlarge focused" placeholder="Color Name" id="hexcode" required="required" value="<?php echo $rown['hexcode']?>">
+                  <!-- <div id="hexcode_error" class="error_msg"></div> -->
+                </div>
+              </div>
+              
+              
+              <div class="form-actions">
+                <input type="hidden" id="pid" name="pid" value='<?php echo $pid; ?>' >
+                <input type="button" name="add_makes" value="Update" class="btn btn-primary" onclick="submitDetailsForm()">
+                <a class="btn" href="#">Cancel</a>
+              </div>
+            </fieldset>
+          </form>     
+          <?php } ?>
+        </div>
+      </div>
+    </div>
+    <!-- /block -->
+    </div>
+  
+</div>
+
+</div>
+</div>
+  
+<?php include "../footer.php";  ?>
+
+<script language="javascript" type="text/javascript">
+    function submitDetailsForm() {
+
+      var error = 1;
+      var name = $("#name").val();
+      
+      if((name == '') || (name == undefined)){
+        $("#name_error").text("This field are required");
+        error = 0;
+      }else{
+        $("#name_error").text("");
+      }
+
+      
+
+        if(error == 1){
+
+            $.ajax({
+                url: '<?php echo $base_url ?>/color/check_edit_exist.php',
+                type: 'post',
+                data: {
+                  name: name,
+                  table_name: 'tbl_color',
+                  pid: '<?php echo $pid; ?>',
+                  
+                },
+                success: function(response) {
+                  
+                if (response == 'success') {
+                     $("#edit_form").submit();
+                 }else if (response == 'name_error') {
+                    toastr.optionsOverride = 'positionclass = "toast-bottom-left"';
+                    toastr.options.positionClass = 'toast-bottom-left';
+                    toastr.error('Color Name Already Exist!');
+                 }else{
+                    toastr.optionsOverride = 'positionclass = "toast-bottom-left"';
+                    toastr.options.positionClass = 'toast-bottom-left';
+                    toastr.error('Some thing error. Please try again!');
+                 }
+                }
+            });
+        }
+       
+    }
+</script>
